@@ -1,0 +1,39 @@
+---
+- name: Deploy static website project
+  hosts: localhost
+  become: true
+
+  tasks:
+    - name: Copy NGINX reverse proxy config to VM
+      copy:
+        src: ./nginx.conf
+        dest: /etc/nginx/nginx.conf
+        owner: root
+        group: root
+        mode: '0644'
+
+    - name: Restart NGINX service on VM
+      service:
+        name: nginx
+        state: restarted
+
+    - name: Build Docker image for static site
+      community.docker.docker_image:
+        name: static_site_image
+        build:
+          path: "{{ playbook_dir }}"
+        source: build
+
+    - name: Remove old static_site container if exists
+      community.docker.docker_container:
+        name: static_site
+        state: absent
+        force_kill: true
+
+    - name: Run static_site Docker container on port 8081
+      community.docker.docker_container:
+        name: static_site
+        image: static_site_image
+        ports:
+          - "8081:80"
+        restart_policy: always
