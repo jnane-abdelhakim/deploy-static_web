@@ -13,9 +13,9 @@
         mode: '0644'
         
     - name: Reload systemd
-        become: true
-        ansible.builtin.shell: systemctl daemon-reload
-        
+      shell: systemctl daemon-reload
+      become: true
+
     - name: Restart NGINX service on VM
       service:
         name: nginx
@@ -34,10 +34,11 @@
         state: absent
         force_kill: true
 
-    - name: Run static_site Docker container 8081 
+    - name: Run static_site Docker container on port 8081
       community.docker.docker_container:
         name: static_site
         image: static_site_image
         ports:
           - "8081:80"
         restart_policy: always
+
