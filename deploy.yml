@@ -30,7 +30,7 @@
         state: absent
         force_kill: true
 
-    - name: Run static_site Docker container on port 8081
+    - name: Run static_site Docker container 8081 
       community.docker.docker_container:
         name: static_site
         image: static_site_image

@@ -24,7 +24,7 @@ pipeline {
         stage('Test Deployment') {
             steps {
                 script {
-                    def status = sh(script: "curl -o /dev/null -s -w '%{http_code}' http://localhost", returnStdout: true).trim()
+                    def status = sh(script: "curl -k -o /dev/null -s -w '%{http_code}' https://localhost", returnStdout: true).trim()
                     if (status != '200') {
                         error("erreur, code HTTP: ${status}")
                     } else {
