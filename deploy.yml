@@ -11,7 +11,11 @@
         owner: root
         group: root
         mode: '0644'
-
+        
+    - name: Reload systemd
+        become: true
+        ansible.builtin.shell: systemctl daemon-reload
+        
     - name: Restart NGINX service on VM
       service:
         name: nginx
